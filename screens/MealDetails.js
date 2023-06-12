@@ -1,16 +1,26 @@
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, Image, StyleSheet, Button, ScrollView} from 'react-native';
 import QuickCard from '../components/QuickCard';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Subtitle from '../components/Subtitle';
+import ButtonIcon from '../components/ButtonIcon';
 function MealDetails({route, navigation}){
     console.log(route.params.data.title);
     useLayoutEffect(() =>{
             navigation.setOptions({
-                title:meal.title
+                title:meal.title,
             });
         }, []
+    
     );
+    navigation.setOptions({
+        headerRight:() => {return <ButtonIcon name = "star" color = "white"  onPress = {onPressHandler} />}
+    });
+
+
+    function onPressHandler(){
+        console.log("clicked!")
+    }
     
     const meal = route.params.data;
     
