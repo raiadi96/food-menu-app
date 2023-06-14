@@ -1,9 +1,7 @@
-import { View, Text, FlatList } from "react-native";
 import { CATEGORIES, MEALS } from "../data/dummy-data";
-import MealItem from "../components/MealItem";
 import { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-
+import MealList from "../components/MealList";
 function MealOverview({route}){
     const catId = route.params.catId;
     const mealsInThisCategory = MEALS.filter((meal) => {
@@ -17,24 +15,6 @@ function MealOverview({route}){
         navigation.setOptions({title:categoryTitle});
     }, [catId, navigation]);
 
-    function renderMeals({item}){
-        console.log("logging list item :", item, "title", item.title);
-        return <MealItem data = {item}/>
-    };
-
-    console.log("Meal in this Overview", mealsInThisCategory);
-    return (
-        <View styles = {styles.container}>
-            <FlatList data={mealsInThisCategory} keyExtractor={item => item.id}  renderItem={renderMeals}/>
-            
-        </View>
-    );
-
+    return <MealList items = {mealsInThisCategory}/>;
 }
-const styles = {
-    container:{
-        flex:1
-    }
-}
-
 export default MealOverview;

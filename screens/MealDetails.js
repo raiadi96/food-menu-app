@@ -1,9 +1,10 @@
 import {View, Text, Image, StyleSheet, Button, ScrollView} from 'react-native';
 import QuickCard from '../components/QuickCard';
-import { useEffect, useLayoutEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Subtitle from '../components/Subtitle';
 import ButtonIcon from '../components/ButtonIcon';
+import { FavoriteContext } from '../store/context/favorite-context';
 function MealDetails({route, navigation}){
     console.log(route.params.data.title);
     useLayoutEffect(() =>{
@@ -13,16 +14,31 @@ function MealDetails({route, navigation}){
         }, []
     
     );
-    navigation.setOptions({
-        headerRight:() => {return <ButtonIcon name = "star" color = "white"  onPress = {onPressHandler} />}
-    });
+    useEffect(() =>{
+        navigation.setOptions({
+            headerRight:() => {return <ButtonIcon name = {isMealFavorite ? "star" : "star-outline"} color = "white"  onPress = {onPressHandler} />}
+        });
+    },[isMealFavorite, onPressHandler]);
+    
 
 
     function onPressHandler(){
-        console.log("clicked!")
+        
+        if(isMealFavorite){
+            favoriteMealCtx.removeFavorite(meal.id);
+            console.log("Meal is not favorite now.")
+        }
+        else{
+            favoriteMealCtx.addFavorite(meal.id);
+            console.log("Meal is favorite now.")
+        }
     }
     
     const meal = route.params.data;
+
+    const favoriteMealCtx = useContext(FavoriteContext);
+
+    const isMealFavorite = favoriteMealCtx.ids.includes(meal.id);
     
     return (
         <View style = {{flex:1}}>
